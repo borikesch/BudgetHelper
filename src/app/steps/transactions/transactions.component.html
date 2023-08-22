@@ -1,1 +1,25 @@
 <p>transactions works!</p>
+
+<ng-container *ngFor="let transaction of transactions">
+    <div>
+        <span>
+            {{ transaction.price }}
+        </span>
+    </div>
+</ng-container>
+
+<button *ngIf="!showAdd" (click)="onClicking()">
+    Add a transaction
+</button>
+
+<ng-container *ngIf="showAdd">
+    <form [formGroup]="transactionForm">
+        <div>
+            <label for="price">Prijs </label>
+            <input id="price" type="text" formControlName="price">
+        </div>
+    </form>
+    <button [disabled]="!transactionForm.valid" (click)="onAdd()">
+        Add
+    </button>
+</ng-container>
