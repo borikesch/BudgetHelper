@@ -1,3 +1,5 @@
 export interface Transaction {
-    price: any;
+    price: string;
+    name: string;
+    date: string;
 }

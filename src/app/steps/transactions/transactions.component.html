@@ -3,12 +3,12 @@
 <ng-container *ngFor="let transaction of transactions">
     <div>
         <span>
-            {{ transaction.price }}
+            {{ transaction.name + ':' }} {{ transaction.price }} {{ transaction.date}}
         </span>
     </div>
 </ng-container>
 
-<button *ngIf="!showAdd" (click)="onClicking()">
+<button *ngIf="!showAdd" (click)="showAdd = true">
     Add a transaction
 </button>
 
@@ -17,6 +17,14 @@
         <div>
             <label for="price">Prijs </label>
             <input id="price" type="text" formControlName="price">
+        </div>
+        <div>
+            <label for="name">Naam </label>
+            <input id="name" type="text" formControlName="name">
+        </div>
+        <div>
+            <label for="date">Datum </label>
+            <input id="date" type="text" formControlName="date">
         </div>
     </form>
     <button [disabled]="!transactionForm.valid" (click)="onAdd()">

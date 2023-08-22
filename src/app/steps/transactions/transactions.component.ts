@@ -13,7 +13,9 @@ export class TransactionsComponent implements OnInit {
   showAdd = false;
 
   transactionForm = new FormGroup({
-    price: new FormControl('', Validators.required),
+    price: new FormControl<string>('', Validators.required),
+    name: new FormControl<string>('', Validators.required),
+    date: new FormControl<string>('', Validators.required),
   });
 
   constructor(private dataService: DataService) { }
@@ -22,13 +24,11 @@ export class TransactionsComponent implements OnInit {
     this.transactions = this.dataService.getTransactionsFromCookie();
   }
 
-  onClicking(): void {
-    this.showAdd = true;
-  }
-
   onAdd(): void {
     const newTransaction: Transaction = {
-      price: this.transactionForm.controls.price.value,
+      price: this.transactionForm?.controls?.price?.value ? this.transactionForm?.controls?.price?.value : '',
+      name: this.transactionForm?.controls?.name?.value ? this.transactionForm?.controls?.name?.value : '',
+      date: this.transactionForm?.controls?.date?.value ? this.transactionForm?.controls?.date?.value : '',
     }
     this.transactions.push(newTransaction);
     this.transactionForm.reset();
