@@ -19,10 +19,10 @@ export class DataService {
   }
 
   private transformCookietoTransactions(cookieData: string): Transaction[] {
-    return [];
+    return JSON.parse(cookieData);
   }
 
   private transformTransactionsToCookie(transactions: Transaction[]): string {
-    return ''
+    return JSON.stringify(transactions);
   }
 }
