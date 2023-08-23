@@ -32,6 +32,6 @@ export class TransactionsComponent implements OnInit {
     }
     this.transactions.push(newTransaction);
     this.transactionForm.reset();
-    this.dataService.setTransactionsFromCookie(this.transactions);
+    this.dataService.setTransactionsToCookie(this.transactions);
   }
 }

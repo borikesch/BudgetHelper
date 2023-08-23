@@ -1,1 +1,28 @@
-<p>budgets works!</p>
+<ng-container *ngFor="let budget of budgets">
+    <div>
+        <span><b>{{ budget.category }}</b></span><br />
+        <span>Money per Month: {{ budget.moneyPerMonth }}</span><br />
+        <span>Money per Month: {{ budget.moneyLeftForMonth }}</span><br />
+
+    </div>
+</ng-container>
+
+<button *ngIf="!showAdd" (click)="showAdd = true">
+    Add a budget
+</button>
+
+<ng-container *ngIf="showAdd">
+    <form [formGroup]="budgetForm">
+        <div>
+            <label for="moneyForBudget">Money For Budget </label>
+            <input id="moneyForBudget" type="text" formControlName="moneyForBudget">
+        </div>
+        <div>
+            <label for="category">Category </label>
+            <input id="category" type="text" formControlName="category">
+        </div>
+    </form>
+    <button [disabled]="!budgetForm.valid" (click)="onAdd()">
+        Add
+    </button>
+</ng-container>

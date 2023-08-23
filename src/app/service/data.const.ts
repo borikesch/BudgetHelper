@@ -1,1 +1,2 @@
-export const cookieName = 'testCookieName'
+export const transactionsCookieName = 'transactions';
+export const budgetsCookieName = 'budgets';
