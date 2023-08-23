@@ -11,6 +11,11 @@ export class DataService {
 
   constructor(private cookieService: CookieService) { }
 
+  resetCookies(): void {
+    this.cookieService.delete(transactionsCookieName);
+    this.cookieService.delete(budgetsCookieName);
+  }
+
   getTransactionsFromCookie(): Transaction[] {
     return this.transformCookieToInput(this.cookieService.get(transactionsCookieName));
   }
