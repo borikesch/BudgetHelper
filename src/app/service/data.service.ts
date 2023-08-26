@@ -33,6 +33,9 @@ export class DataService {
   }
 
   private transformCookieToInput(cookieData: string): any[] {
+    if (cookieData === '' || !cookieData) {
+      return [];
+    }
     return JSON.parse(cookieData);
   }
 

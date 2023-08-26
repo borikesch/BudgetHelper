@@ -2,6 +2,7 @@
 
 <ng-container *ngFor="let transaction of transactions">
     <div>
+        <span><b>{{ transaction.category }}</b></span><br />
         <span>
             {{ transaction.name + ':' }} {{ transaction.price }} {{ transaction.date}}
         </span>
@@ -25,6 +26,15 @@
         <div>
             <label for="date">Datum </label>
             <input id="date" type="text" formControlName="date">
+        </div>
+        <div>
+            <label for="category">Category </label>
+            <select id="category" name="category" formControlName="category">
+                <option value="">Kies een Category</option>
+                <ng-container *ngFor="let option of categoryOptions">
+                    <option [value]="option">{{ option }}</option>
+                </ng-container>
+            </select>
         </div>
     </form>
     <button [disabled]="!transactionForm.valid" (click)="onAdd()">
