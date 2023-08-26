@@ -4,7 +4,7 @@
     <div>
         <span><b>{{ transaction.category }}</b></span><br />
         <span>
-            {{ transaction.name + ':' }} {{ transaction.price }} {{ transaction.date}}
+            {{ transaction.name + ':' }} {{ transaction.price | currency:'EUR' }} {{ transaction.date}}
         </span>
     </div>
 </ng-container>
