@@ -12,6 +12,9 @@
                 <td *ngFor="let key of tableHeaders">
                     {{ getTableItem(row,key) }}
                 </td>
+                <td>
+                    <button (click)="delete(row)">delete</button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -22,30 +25,42 @@
 </button>
 
 <ng-container *ngIf="showAdd">
-    <form [formGroup]="transactionForm">
-        <div>
-            <label for="price">Prijs </label>
-            <input id="price" type="text" formControlName="price">
-        </div>
-        <div>
-            <label for="name">Naam </label>
-            <input id="name" type="text" formControlName="name">
-        </div>
-        <div>
-            <label for="date">Datum </label>
-            <input id="date" type="date" formControlName="date">
-        </div>
-        <div>
-            <label for="category">Category </label>
-            <select id="category" name="category" formControlName="category">
-                <option value="">Kies een Category</option>
-                <ng-container *ngFor="let option of categoryOptions">
-                    <option [value]="option">{{ option }}</option>
-                </ng-container>
-            </select>
-        </div>
-    </form>
-    <button [disabled]="!transactionForm.valid" (click)="onAdd()">
-        Add
-    </button>
+    <div>
+        <form [formGroup]="transactionForm">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Prijs</th>
+                        <th>Datum</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input id="name" type="text" formControlName="name">
+                        </td>
+                        <td>
+                            <input id="price" type="text" formControlName="price">
+                        </td>
+                        <td>
+                            <input id="date" type="date" formControlName="date">
+                        </td>
+                        <td>
+                            <select id="category" name="category" formControlName="category">
+                                <option value="">Kies een Category</option>
+                                <ng-container *ngFor="let option of categoryOptions">
+                                    <option [value]="option">{{ option }}</option>
+                                </ng-container>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <button [disabled]="!transactionForm.valid" (click)="onAdd()">
+            Add
+        </button>
+    </div>
 </ng-container>

@@ -59,6 +59,13 @@ export class TransactionsComponent implements OnInit {
     }
   }
 
+  delete(row: Row) {
+    this.transactions = this.transactions.filter(t =>
+      t.category !== row.category && t.date !== row.date && t.name !== row.name && t.price !== row.price);
+    this.dataService.setTransactionsToCookie(this.transactions);
+    this.setLayout();
+  }
+
   private setCategoryOptions() {
     this.budgets.forEach(budget => {
       this.categoryOptions.push(budget.category);
