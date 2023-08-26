@@ -1,7 +1,7 @@
-<ng-container *ngFor="let budget of budgets">
+<ng-container *ngFor="let budget of extendedBudgets">
     <div>
         <span><b>{{ budget.category }}</b></span><br />
-        <span>Money per Month: {{ budget.moneyPerMonth | currency: 'EUR' }}</span><br />
+        <span>Geld over tot vandaag: {{ budget.moneyLeftInBudget | currency: 'EUR' }}</span><br />
     </div>
 </ng-container>
 

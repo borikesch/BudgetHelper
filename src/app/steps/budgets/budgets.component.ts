@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Budget } from 'src/app/models/budget.model';
+import { Budget, ExtendedBudget } from 'src/app/models/budget.model';
+import { BudgetCalculatorService } from 'src/app/service/budget/calculator.service';
 import { DataService } from 'src/app/service/data/data.service'
 
 @Component({
@@ -10,6 +11,7 @@ import { DataService } from 'src/app/service/data/data.service'
 })
 export class BudgetsComponent implements OnInit {
   budgets: Budget[] = [];
+  extendedBudgets: ExtendedBudget[] = [];
   showAdd = false;
 
   budgetForm = new FormGroup({
@@ -18,10 +20,16 @@ export class BudgetsComponent implements OnInit {
     date: new FormControl<any>('', Validators.required),
   });
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private dataService: DataService,
+    private budgetCalculatorService: BudgetCalculatorService,
+  ) { }
 
   ngOnInit(): void {
+    const transactions = this.dataService.getTransactionsFromCookie();
+    const dateOfCalculation = new Date().toISOString().split('T')[0];
     this.budgets = this.dataService.getBudgetsFromCookie();
+    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets, transactions, dateOfCalculation);
     this.resetForm();
   }
 
