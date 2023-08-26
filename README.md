@@ -34,6 +34,14 @@ _Overview of budget this month
 _Change 'start of month' 
 X_Ability to save transactions and budgets in cookies
 
+## Challenges
+_No way yet to validate inputs
+    _Add total of what we believe should be the number on your bank account
+        _Different accounts?
+_No way to check if you budgets is valid
+    _Warning if your income was lower then your planned budget
+_No way to put in your income yet
+
 ## Outline of logic
 
 Dashboard
