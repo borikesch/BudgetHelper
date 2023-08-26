@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { budgetsCookieName, transactionsCookieName } from './data.const';
-import { Transaction } from '../models/transaction.model';
-import { Budget } from '../models/budget.model';
+import { Transaction } from '../../models/transaction.model';
+import { Budget } from '../../models/budget.model';
 
 @Injectable({
   providedIn: 'root'

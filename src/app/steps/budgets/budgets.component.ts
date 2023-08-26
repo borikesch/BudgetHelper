@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Budget } from 'src/app/models/budget.model';
-import { Transaction } from 'src/app/models/transaction.model';
-import { DataService } from 'src/app/service/data.service'
+import { DataService } from 'src/app/service/data/data.service'
 
 @Component({
   selector: 'app-budgets',
@@ -33,4 +32,6 @@ export class BudgetsComponent implements OnInit {
     this.budgetForm.reset();
     this.dataService.setBudgetsToCookie(this.budgets);
   }
+
+
 }
