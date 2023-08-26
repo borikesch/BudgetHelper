@@ -1,13 +1,21 @@
-<p>transactions works!</p>
-
-<ng-container *ngFor="let transaction of transactions">
-    <div>
-        <span><b>{{ transaction.category }}</b></span><br />
-        <span>
-            {{ transaction.name + ':' }} {{ transaction.price | currency:'EUR' }} {{ transaction.date}}
-        </span>
-    </div>
-</ng-container>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th *ngFor="let header of tableHeaders">
+                    {{ header }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of tableRows">
+                <td *ngFor="let key of tableHeaders">
+                    {{ getTableItem(row,key) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <button *ngIf="!showAdd" (click)="showAdd = true">
     Add a transaction

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,7 +24,9 @@ import { AdminComponent } from './steps/admin/admin.component';
     CommonModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'nl-NL' },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

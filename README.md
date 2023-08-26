@@ -27,14 +27,15 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 ## Goals of repo
-_Overview of all transactions made
+X_Overview of all transactions made
 _Ability to change transactions
-_Ability to setup budgets
+X_Ability to setup budgets
 _Overview of budget this month
 _Change 'start of month' 
-_Ability to save transactions and budgets in cookies
+X_Ability to save transactions and budgets in cookies
 
 ## Outline of logic
+
 Dashboard
     - Overview Transactions
         - Add Transaction

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Budget } from 'src/app/models/budget.model';
 import { Transaction } from 'src/app/models/transaction.model';
 import { DataService } from 'src/app/service/data/data.service'
+import { Row } from './transactions.types';
 
 @Component({
   selector: 'app-transactions',
@@ -14,6 +15,8 @@ export class TransactionsComponent implements OnInit {
   budgets: Budget[] = [];
   showAdd = false;
   categoryOptions: string[] = [];
+  tableHeaders: string[] = [];
+  tableRows: Row[] = [];
 
   transactionForm = new FormGroup({
     price: new FormControl<string>('', Validators.required),
@@ -29,6 +32,7 @@ export class TransactionsComponent implements OnInit {
     this.budgets = this.dataService.getBudgetsFromCookie();
 
     this.setCategoryOptions();
+    this.setLayout();
     this.resetForm();
   }
 
@@ -41,7 +45,18 @@ export class TransactionsComponent implements OnInit {
     }
     this.transactions.push(newTransaction);
     this.resetForm();
+    this.setLayout();
     this.dataService.setTransactionsToCookie(this.transactions);
+  }
+
+  getTableItem(row: Row, key: string): string {
+    switch (key) {
+      case 'Category': return row.category;
+      case 'Date': return row.date;
+      case 'Name': return row.name;
+      case 'Price': return '€ ' + parseFloat(row.price).toFixed(2).toString();
+      default: return 'undefined';
+    }
   }
 
   private setCategoryOptions() {
@@ -58,5 +73,15 @@ export class TransactionsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.transactionForm?.controls?.date.setValue(currentDate);
+  }
+
+  private setLayout() {
+    this.tableRows = [];
+    this.tableHeaders = ['Name', 'Category', 'Date', 'Price'];
+    this.transactions.forEach(transaction => {
+      this.tableRows.push({
+        ...transaction
+      });
+    });
   }
 }

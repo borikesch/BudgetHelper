@@ -21,6 +21,8 @@ export class AdminComponent {
     this.createTestTransactions();
   }
 
+
+
   private createTestBudgets() {
     const testBudgets: Budget[] = [];
     const today = new Date().toISOString().split('T')[0];

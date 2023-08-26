@@ -1,9 +1,21 @@
-<ng-container *ngFor="let budget of extendedBudgets">
-    <div>
-        <span><b>{{ budget.category }}</b></span><br />
-        <span>Geld over tot vandaag: {{ budget.moneyLeftInBudget | currency: 'EUR' }}</span><br />
-    </div>
-</ng-container>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th *ngFor="let header of tableHeaders">
+                    {{ header }}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of tableRows">
+                <td *ngFor="let key of tableHeaders">
+                    {{ getTableItem(row,key) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <button *ngIf="!showAdd" (click)="showAdd = true">
     Add a budget
