@@ -29,6 +29,7 @@ export class TransactionsComponent implements OnInit {
     this.budgets = this.dataService.getBudgetsFromCookie();
 
     this.setCategoryOptions();
+    this.resetForm();
   }
 
   onAdd(): void {
@@ -39,7 +40,7 @@ export class TransactionsComponent implements OnInit {
       category: this.transactionForm?.controls?.category?.value ? this.transactionForm?.controls?.category?.value : '',
     }
     this.transactions.push(newTransaction);
-    this.transactionForm.reset();
+    this.resetForm();
     this.dataService.setTransactionsToCookie(this.transactions);
   }
 
@@ -47,5 +48,15 @@ export class TransactionsComponent implements OnInit {
     this.budgets.forEach(budget => {
       this.categoryOptions.push(budget.category);
     })
+  }
+
+  private resetForm() {
+    this.transactionForm.reset();
+    this.prefillDate();
+  }
+
+  private prefillDate() {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    this.transactionForm?.controls?.date.setValue(currentDate);
   }
 }

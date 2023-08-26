@@ -22,6 +22,7 @@ export class BudgetsComponent implements OnInit {
 
   ngOnInit(): void {
     this.budgets = this.dataService.getBudgetsFromCookie();
+    this.resetForm();
   }
 
   onAdd(): void {
@@ -32,9 +33,18 @@ export class BudgetsComponent implements OnInit {
       changes: [],
     }
     this.budgets.push(newBudget);
-    this.budgetForm.reset();
+    this.resetForm();
     this.dataService.setBudgetsToCookie(this.budgets);
   }
 
+  private resetForm() {
+    this.budgetForm.reset();
+    this.prefillDate();
+  }
+
+  private prefillDate() {
+    let currentDate = new Date().toJSON().slice(0, 10);
+    this.budgetForm?.controls?.date.setValue(currentDate);
+  }
 
 }
