@@ -18,7 +18,7 @@ export class TransactionsComponent implements OnInit {
   transactionForm = new FormGroup({
     price: new FormControl<string>('', Validators.required),
     name: new FormControl<string>('', Validators.required),
-    date: new FormControl<string>('', Validators.required),
+    date: new FormControl<any>('', Validators.required),
     category: new FormControl<string>('', Validators.required),
   });
 

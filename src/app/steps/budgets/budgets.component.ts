@@ -15,6 +15,7 @@ export class BudgetsComponent implements OnInit {
   budgetForm = new FormGroup({
     moneyForBudget: new FormControl<string>('', Validators.required),
     category: new FormControl<string>('', Validators.required),
+    date: new FormControl<any>('', Validators.required),
   });
 
   constructor(private dataService: DataService) { }
@@ -27,6 +28,8 @@ export class BudgetsComponent implements OnInit {
     const newBudget: Budget = {
       moneyPerMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       category: this.budgetForm?.controls?.category?.value ? this.budgetForm?.controls?.category?.value : '',
+      dateAdded: this.budgetForm?.controls?.date?.value ? this.budgetForm?.controls?.date?.value : '',
+      changes: [],
     }
     this.budgets.push(newBudget);
     this.budgetForm.reset();
