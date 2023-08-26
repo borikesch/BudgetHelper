@@ -12,31 +12,56 @@
                 <td *ngFor="let key of tableHeaders">
                     {{ getTableItem(row,key) }}
                 </td>
+                <td>
+                    <button (click)="deleteBudget(row.category)">delete</button>
+                </td>
+            </tr>
+            <tr>
+                <td> Total</td>
+                <td> {{ getTotalBudgetPerMonth() }}</td>
+                <td> {{ getTotalBudgetLeft() }}</td>
+                <td> </td>
             </tr>
         </tbody>
     </table>
+
+    <button *ngIf="!showAdd" (click)="showAdd = true">
+        Add a budget
+    </button>
 </div>
 
-<button *ngIf="!showAdd" (click)="showAdd = true">
-    Add a budget
-</button>
 
 <ng-container *ngIf="showAdd">
-    <form [formGroup]="budgetForm">
-        <div>
-            <label for="moneyForBudget">Money For Budget </label>
-            <input id="moneyForBudget" type="text" formControlName="moneyForBudget">
-        </div>
-        <div>
-            <label for="category">Category </label>
-            <input id="category" type="text" formControlName="category">
-        </div>
-        <div>
-            <label for="date">Date </label>
-            <input id="date" type="date" formControlName="date">
-        </div>
-    </form>
-    <button [disabled]="!budgetForm.valid" (click)="onAdd()">
-        Add
-    </button>
+    <div>
+        <form [formGroup]="budgetForm">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Money for Budget</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="category">Category </label>
+                            <input id="category" type="text" formControlName="category">
+                        </td>
+                        <td>
+                            <label for="moneyForBudget">Money For Budget </label>
+                            <input id="moneyForBudget" type="text" formControlName="moneyForBudget">
+                        </td>
+                        <td>
+                            <label for="date">Date </label>
+                            <input id="date" type="date" formControlName="date">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <button [disabled]="!budgetForm.valid" (click)="onAdd()">
+            Add
+        </button>
+    </div>
 </ng-container>

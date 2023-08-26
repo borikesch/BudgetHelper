@@ -45,17 +45,41 @@ export class BudgetsComponent implements OnInit {
     }
     this.budgets.push(newBudget);
     this.resetForm();
-    this.setLayout();
     this.dataService.setBudgetsToCookie(this.budgets);
     this.calculateExtendedBudgets();
+    this.setLayout();
   }
 
   getTableItem(row: Row, key: string): string {
     switch (key) {
       case 'Category': return row.category;
       case 'Money left in budget': return '€ ' + parseFloat(row.moneyLeftInBudget).toFixed(2).toString();
+      case 'Money each month': return '€ ' + parseFloat(row.moneyLeftInBudget).toFixed(2).toString();
       default: return 'undefined';
     }
+  }
+
+  deleteBudget(category: string): void {
+    this.budgets = this.budgets.filter(b => b.category !== category);
+    this.dataService.setBudgetsToCookie(this.budgets);
+    this.calculateExtendedBudgets();
+    this.setLayout();
+  }
+
+  getTotalBudgetPerMonth(): string {
+    let result = 0;
+    this.budgets.forEach(budget => {
+      result += parseFloat(budget.moneyPerMonth);
+    });
+    return '€ ' + result.toFixed(2).toString();
+  }
+
+  getTotalBudgetLeft(): string {
+    let result = 0;
+    this.extendedBudgets.forEach(budget => {
+      result += parseFloat(budget.moneyLeftInBudget);
+    });
+    return '€ ' + result.toFixed(2).toString();
   }
 
   private resetForm() {
@@ -76,11 +100,12 @@ export class BudgetsComponent implements OnInit {
 
   private setLayout() {
     this.tableRows = [];
-    this.tableHeaders = ['Category', 'Money left in budget'];
+    this.tableHeaders = ['Category', 'Money left in budget', 'Money each month'];
     this.extendedBudgets.forEach(budget => {
       this.tableRows.push({
         category: budget.category,
         moneyLeftInBudget: budget.moneyLeftInBudget,
+        moneyPerMonth: budget.moneyPerMonth,
       });
     });
   }
