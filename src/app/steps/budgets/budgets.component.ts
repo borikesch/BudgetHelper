@@ -26,7 +26,6 @@ export class BudgetsComponent implements OnInit {
 
   onAdd(): void {
     const newBudget: Budget = {
-      moneyLeftForMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       moneyPerMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       category: this.budgetForm?.controls?.category?.value ? this.budgetForm?.controls?.category?.value : '',
     }
