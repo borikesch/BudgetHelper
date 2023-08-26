@@ -26,10 +26,8 @@ export class BudgetsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const transactions = this.dataService.getTransactionsFromCookie();
-    const dateOfCalculation = new Date().toISOString().split('T')[0];
     this.budgets = this.dataService.getBudgetsFromCookie();
-    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets, transactions, dateOfCalculation);
+    this.calculateExtendedBudgets();
     this.resetForm();
   }
 
@@ -43,6 +41,7 @@ export class BudgetsComponent implements OnInit {
     this.budgets.push(newBudget);
     this.resetForm();
     this.dataService.setBudgetsToCookie(this.budgets);
+    this.calculateExtendedBudgets();
   }
 
   private resetForm() {
@@ -53,6 +52,13 @@ export class BudgetsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.budgetForm?.controls?.date.setValue(currentDate);
+  }
+
+  private calculateExtendedBudgets() {
+    const transactions = this.dataService.getTransactionsFromCookie();
+    const dateOfCalculation = new Date().toISOString().split('T')[0];
+    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets, transactions, dateOfCalculation);
+
   }
 
 }
