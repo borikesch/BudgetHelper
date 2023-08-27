@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
-import { budgetsCookieName, transactionsCookieName } from './data.const';
+import { bankaccountsCookieName, budgetsCookieName, transactionsCookieName } from './data.const';
 import { Transaction } from '../../models/transaction.model';
 import { Budget } from '../../models/budget.model';
 import { Bankaccount } from 'src/app/models/bankaccount.model';
@@ -15,6 +15,7 @@ export class DataService {
   resetCookies(): void {
     this.cookieService.delete(transactionsCookieName);
     this.cookieService.delete(budgetsCookieName);
+    this.cookieService.delete(bankaccountsCookieName);
   }
 
   getTransactionsFromCookie(): Transaction[] {
@@ -26,11 +27,11 @@ export class DataService {
   }
 
   getBankaccountsFromCookie(): Bankaccount[] {
-    return this.transformCookieToInput(this.cookieService.get(transactionsCookieName));
+    return this.transformCookieToInput(this.cookieService.get(bankaccountsCookieName));
   }
 
   setBankaccountsToCookie(transactions: Bankaccount[]): void {
-    this.cookieService.set(transactionsCookieName, this.transformInputToCookie(transactions));
+    this.cookieService.set(bankaccountsCookieName, this.transformInputToCookie(transactions));
   }
 
   getBudgetsFromCookie(): Budget[] {

@@ -1,1 +1,49 @@
-TODO
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Bedrag op rekening</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let bankaccount of bankaccounts">
+                <td>{{ bankaccount.name }}</td>
+                <td>{{ bankaccount.amount | currency:'EUR' }}</td>
+                <td><button (click)="deleteBudget(bankaccount)">delete</button></td>
+            </tr>
+            <tr>
+                <td> Total</td>
+                <td> {{ getTotalAmount() | currency:'EUR'}}</td>
+                <td> </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button *ngIf="!showAdd" (click)="showAdd = true">
+        Add a budget
+    </button>
+</div>
+
+
+<ng-container *ngIf="showAdd">
+    <div>
+        <form [formGroup]="bankaccountForm">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Huidige hoeveelheid op rekening</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input id="name" type="text" formControlName="name"></td>
+                        <td><input id="amount" type="text" formControlName="amount"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <button [disabled]="!bankaccountForm.valid" (click)="onAdd()">Add</button>
+    </div>
+</ng-container>
