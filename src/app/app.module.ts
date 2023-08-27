@@ -10,6 +10,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminComponent } from './steps/admin/admin.component';
 import { BankaccountsComponent } from './steps/bankaccounts/bankaccounts.component';
+import { registerLocaleData } from '@angular/common';
+import localeNl from '@angular/common/locales/nl';
+
+registerLocaleData(localeNl);
 
 @NgModule({
   declarations: [

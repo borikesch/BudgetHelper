@@ -3,8 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Budget, ExtendedBudget } from 'src/app/models/budget.model';
 import { BudgetCalculatorService } from 'src/app/service/budget/calculator.service';
 import { DataService } from 'src/app/service/data/data.service'
-import { Row } from './budgets.types';
-import { CurrencyPipe, formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'app-budgets',
@@ -15,8 +13,6 @@ export class BudgetsComponent implements OnInit {
   budgets: Budget[] = [];
   extendedBudgets: ExtendedBudget[] = [];
   showAdd = false;
-  tableHeaders: string[] = [];
-  tableRows: Row[] = [];
 
   budgetForm = new FormGroup({
     moneyForBudget: new FormControl<string>('', Validators.required),
@@ -33,7 +29,6 @@ export class BudgetsComponent implements OnInit {
     this.budgets = this.dataService.getBudgetsFromCookie();
     this.calculateExtendedBudgets();
     this.resetForm();
-    this.setLayout();
   }
 
   onAdd(): void {
@@ -47,23 +42,12 @@ export class BudgetsComponent implements OnInit {
     this.resetForm();
     this.dataService.setBudgetsToCookie(this.budgets);
     this.calculateExtendedBudgets();
-    this.setLayout();
-  }
-
-  getTableItem(row: Row, key: string): string {
-    switch (key) {
-      case 'Category': return row.category;
-      case 'Money left in budget': return '€ ' + parseFloat(row.moneyLeftInBudget).toFixed(2).toString();
-      case 'Money each month': return '€ ' + parseFloat(row.moneyLeftInBudget).toFixed(2).toString();
-      default: return 'undefined';
-    }
   }
 
   deleteBudget(category: string): void {
     this.budgets = this.budgets.filter(b => b.category !== category);
     this.dataService.setBudgetsToCookie(this.budgets);
     this.calculateExtendedBudgets();
-    this.setLayout();
   }
 
   getTotalBudgetPerMonth(): string {
@@ -97,17 +81,4 @@ export class BudgetsComponent implements OnInit {
     const dateOfCalculation = new Date().toISOString().split('T')[0];
     this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets, transactions, dateOfCalculation);
   }
-
-  private setLayout() {
-    this.tableRows = [];
-    this.tableHeaders = ['Category', 'Money left in budget', 'Money each month'];
-    this.extendedBudgets.forEach(budget => {
-      this.tableRows.push({
-        category: budget.category,
-        moneyLeftInBudget: budget.moneyLeftInBudget,
-        moneyPerMonth: budget.moneyPerMonth,
-      });
-    });
-  }
-
 }

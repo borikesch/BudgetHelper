@@ -2,27 +2,26 @@
     <table>
         <thead>
             <tr>
-                <th *ngFor="let header of tableHeaders">
-                    {{ header }}
-                </th>
+                <th>Naam</th>
+                <th>Categorie</th>
+                <th>Datum</th>
+                <th>Prijs</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let row of tableRows">
-                <td *ngFor="let key of tableHeaders">
-                    {{ getTableItem(row,key) }}
-                </td>
-                <td>
-                    <button (click)="delete(row)">delete</button>
-                </td>
+            <tr *ngFor="let transaction of transactions">
+                <td>{{ transaction.name }}</td>
+                <td>{{ transaction.category }}</td>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.price | currency:'EUR' }}</td>
+                <td><button (click)="delete(transaction)">delete</button></td>
             </tr>
         </tbody>
     </table>
 </div>
 
-<button *ngIf="!showAdd" (click)="showAdd = true">
-    Add a transaction
-</button>
+<button *ngIf="!showAdd" (click)="showAdd = true">Add a transaction</button>
 
 <ng-container *ngIf="showAdd">
     <div>
@@ -38,15 +37,9 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <input id="name" type="text" formControlName="name">
-                        </td>
-                        <td>
-                            <input id="price" type="text" formControlName="price">
-                        </td>
-                        <td>
-                            <input id="date" type="date" formControlName="date">
-                        </td>
+                        <td><input id="name" type="text" formControlName="name"></td>
+                        <td><input id="price" type="text" formControlName="price"></td>
+                        <td><input id="date" type="date" formControlName="date"></td>
                         <td>
                             <select id="category" name="category" formControlName="category">
                                 <option value="">Kies een Category</option>

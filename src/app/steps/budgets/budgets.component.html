@@ -2,19 +2,18 @@
     <table>
         <thead>
             <tr>
-                <th *ngFor="let header of tableHeaders">
-                    {{ header }}
-                </th>
+                <th>Category</th>
+                <th>Money left in budget</th>
+                <th>Money each month</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let row of tableRows">
-                <td *ngFor="let key of tableHeaders">
-                    {{ getTableItem(row,key) }}
-                </td>
-                <td>
-                    <button (click)="deleteBudget(row.category)">delete</button>
-                </td>
+            <tr *ngFor="let budget of extendedBudgets">
+                <td>{{ budget.category }}</td>
+                <td>{{ budget.moneyLeftInBudget | currency:'EUR' }}</td>
+                <td>{{ budget.moneyPerMonth | currency:'EUR' }}</td>
+                <td><button (click)="deleteBudget(budget.category)">delete</button></td>
             </tr>
             <tr>
                 <td> Total</td>
@@ -44,21 +43,13 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>
-                            <input id="category" type="text" formControlName="category">
-                        </td>
-                        <td>
-                            <input id="moneyForBudget" type="text" formControlName="moneyForBudget">
-                        </td>
-                        <td>
-                            <input id="date" type="date" formControlName="date">
-                        </td>
+                        <td><input id="category" type="text" formControlName="category"></td>
+                        <td><input id="moneyForBudget" type="text" formControlName="moneyForBudget"></td>
+                        <td><input id="date" type="date" formControlName="date"></td>
                     </tr>
                 </tbody>
             </table>
         </form>
-        <button [disabled]="!budgetForm.valid" (click)="onAdd()">
-            Add
-        </button>
+        <button [disabled]="!budgetForm.valid" (click)="onAdd()">Add</button>
     </div>
 </ng-container>

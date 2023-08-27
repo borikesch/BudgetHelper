@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Budget } from 'src/app/models/budget.model';
 import { Transaction } from 'src/app/models/transaction.model';
-import { DataService } from 'src/app/service/data/data.service'
-import { Row } from './transactions.types';
+import { DataService } from 'src/app/service/data/data.service';
 
 @Component({
   selector: 'app-transactions',
@@ -15,8 +14,6 @@ export class TransactionsComponent implements OnInit {
   budgets: Budget[] = [];
   showAdd = false;
   categoryOptions: string[] = [];
-  tableHeaders: string[] = [];
-  tableRows: Row[] = [];
 
   transactionForm = new FormGroup({
     price: new FormControl<string>('', Validators.required),
@@ -32,7 +29,6 @@ export class TransactionsComponent implements OnInit {
     this.budgets = this.dataService.getBudgetsFromCookie();
 
     this.setCategoryOptions();
-    this.setLayout();
     this.resetForm();
   }
 
@@ -45,25 +41,13 @@ export class TransactionsComponent implements OnInit {
     }
     this.transactions.push(newTransaction);
     this.resetForm();
-    this.setLayout();
     this.dataService.setTransactionsToCookie(this.transactions);
   }
 
-  getTableItem(row: Row, key: string): string {
-    switch (key) {
-      case 'Category': return row.category;
-      case 'Date': return row.date;
-      case 'Name': return row.name;
-      case 'Price': return '€ ' + parseFloat(row.price).toFixed(2).toString();
-      default: return 'undefined';
-    }
-  }
-
-  delete(row: Row) {
+  delete(transaction: Transaction) {
     this.transactions = this.transactions.filter(t =>
-      t.category !== row.category && t.date !== row.date && t.name !== row.name && t.price !== row.price);
+      t.category !== transaction.category && t.date !== transaction.date && t.name !== transaction.name && t.price !== transaction.price);
     this.dataService.setTransactionsToCookie(this.transactions);
-    this.setLayout();
   }
 
   private setCategoryOptions() {
@@ -80,15 +64,5 @@ export class TransactionsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.transactionForm?.controls?.date.setValue(currentDate);
-  }
-
-  private setLayout() {
-    this.tableRows = [];
-    this.tableHeaders = ['Name', 'Category', 'Date', 'Price'];
-    this.transactions.forEach(transaction => {
-      this.tableRows.push({
-        ...transaction
-      });
-    });
   }
 }
