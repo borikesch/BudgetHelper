@@ -9,6 +9,7 @@ import { BudgetsComponent } from './steps/budgets/budgets.component';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminComponent } from './steps/admin/admin.component';
+import { BankaccountsComponent } from './steps/bankaccounts/bankaccounts.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { AdminComponent } from './steps/admin/admin.component';
     DashboardComponent,
     TransactionsComponent,
     BudgetsComponent,
-    AdminComponent
+    AdminComponent,
+    BankaccountsComponent
   ],
   imports: [
     BrowserModule,

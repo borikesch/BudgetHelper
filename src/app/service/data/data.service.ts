@@ -3,6 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { budgetsCookieName, transactionsCookieName } from './data.const';
 import { Transaction } from '../../models/transaction.model';
 import { Budget } from '../../models/budget.model';
+import { Bankaccount } from 'src/app/models/bankaccount.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,14 @@ export class DataService {
   }
 
   setTransactionsToCookie(transactions: Transaction[]): void {
+    this.cookieService.set(transactionsCookieName, this.transformInputToCookie(transactions));
+  }
+
+  getBankaccountsFromCookie(): Bankaccount[] {
+    return this.transformCookieToInput(this.cookieService.get(transactionsCookieName));
+  }
+
+  setBankaccountsToCookie(transactions: Bankaccount[]): void {
     this.cookieService.set(transactionsCookieName, this.transformInputToCookie(transactions));
   }
 
