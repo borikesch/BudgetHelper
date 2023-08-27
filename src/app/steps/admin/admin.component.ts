@@ -17,6 +17,7 @@ export class AdminComponent {
   }
 
   onCreateTestScenario() {
+    this.dataService.resetCookies();
     this.createTestBudgets();
     this.createTestTransactions();
   }
@@ -24,56 +25,52 @@ export class AdminComponent {
 
 
   private createTestBudgets() {
-    const testBudgets: Budget[] = [];
     const today = new Date().toISOString().split('T')[0];
-    testBudgets.push({
+    this.dataService.addBudget({
       moneyPerMonth: '150',
       category: 'Boodschappen',
       dateAdded: today,
       changes: [],
     });
-    testBudgets.push({
+    this.dataService.addBudget({
       moneyPerMonth: '650',
       category: 'Hypotheek',
       dateAdded: today,
       changes: [],
     });
-    testBudgets.push({
+    this.dataService.addBudget({
       moneyPerMonth: '100',
       category: 'Uitjes',
       dateAdded: today,
       changes: [],
     });
-    this.dataService.setBudgetsToCookie(testBudgets);
   }
 
   private createTestTransactions() {
-    const testTransactions: Transaction[] = [];
     const today = new Date().toISOString().split('T')[0];
-    testTransactions.push({
+    this.dataService.addTransaction({
       price: '5.99',
       category: 'Boodschappen',
       name: 'Wekelijkse boodschappen',
       date: today,
     });
-    testTransactions.push({
+    this.dataService.addTransaction({
       price: '24.39',
       category: 'Boodschappen',
       name: 'AH boodschappen',
       date: today,
     });
-    testTransactions.push({
+    this.dataService.addTransaction({
       price: '650',
       category: 'Hypotheek',
       name: 'Maandelijkse afschrijving',
       date: today,
     });
-    testTransactions.push({
+    this.dataService.addTransaction({
       price: '35.34',
       category: 'Uitjes',
       name: 'Uit eten geweest',
       date: today,
     });
-    this.dataService.setTransactionsToCookie(testTransactions);
   }
 }

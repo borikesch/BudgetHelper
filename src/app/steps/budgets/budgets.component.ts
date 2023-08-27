@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Budget, ExtendedBudget } from 'src/app/models/budget.model';
 import { BudgetCalculatorService } from 'src/app/service/budget/calculator.service';
 import { DataService } from 'src/app/service/data/data.service'
@@ -10,7 +11,7 @@ import { DataService } from 'src/app/service/data/data.service'
   styleUrls: ['./budgets.component.css']
 })
 export class BudgetsComponent implements OnInit {
-  budgets: Budget[] = [];
+  budgets$: Observable<Budget[]> = this.dataService.budgets$;
   extendedBudgets: ExtendedBudget[] = [];
   showAdd = false;
 
@@ -26,7 +27,6 @@ export class BudgetsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.budgets = this.dataService.getBudgetsFromCookie();
     this.calculateExtendedBudgets();
     this.resetForm();
   }
@@ -38,23 +38,21 @@ export class BudgetsComponent implements OnInit {
       dateAdded: this.budgetForm?.controls?.date?.value ? this.budgetForm?.controls?.date?.value : '',
       changes: [],
     }
-    this.budgets.push(newBudget);
+    this.dataService.addBudget(newBudget);
     this.resetForm();
-    this.dataService.setBudgetsToCookie(this.budgets);
     this.calculateExtendedBudgets();
   }
 
-  deleteBudget(category: string): void {
-    this.budgets = this.budgets.filter(b => b.category !== category);
-    this.dataService.setBudgetsToCookie(this.budgets);
-    this.calculateExtendedBudgets();
+  deleteBudget(budget: Budget): void {
+    this.dataService.deleteBudget(budget);
   }
 
   getTotalBudgetPerMonth(): string {
     let result = 0;
-    this.budgets.forEach(budget => {
-      result += parseFloat(budget.moneyPerMonth);
-    });
+    // TODO mbv observable
+    // this.budgets.forEach(budget => {
+    //   result += parseFloat(budget.moneyPerMonth);
+    // });
     return '€ ' + result.toFixed(2).toString();
   }
 
@@ -77,8 +75,7 @@ export class BudgetsComponent implements OnInit {
   }
 
   private calculateExtendedBudgets() {
-    const transactions = this.dataService.getTransactionsFromCookie();
     const dateOfCalculation = new Date().toISOString().split('T')[0];
-    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets, transactions, dateOfCalculation);
+    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets$, this.dataService.transactions$, dateOfCalculation);
   }
 }

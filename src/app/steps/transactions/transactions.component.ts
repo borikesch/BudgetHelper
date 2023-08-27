@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, take } from 'rxjs';
 import { Budget } from 'src/app/models/budget.model';
 import { Transaction } from 'src/app/models/transaction.model';
 import { DataService } from 'src/app/service/data/data.service';
@@ -10,8 +11,8 @@ import { DataService } from 'src/app/service/data/data.service';
   styleUrls: ['./transactions.component.css']
 })
 export class TransactionsComponent implements OnInit {
-  transactions: Transaction[] = [];
-  budgets: Budget[] = [];
+  transactions$: Observable<Transaction[]> = this.dataService.transactions$;
+  budgets$: Observable<Budget[]> = this.dataService.budgets$;
   showAdd = false;
   categoryOptions: string[] = [];
 
@@ -25,9 +26,6 @@ export class TransactionsComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
-    this.transactions = this.dataService.getTransactionsFromCookie();
-    this.budgets = this.dataService.getBudgetsFromCookie();
-
     this.setCategoryOptions();
     this.resetForm();
   }
@@ -39,20 +37,19 @@ export class TransactionsComponent implements OnInit {
       date: this.transactionForm?.controls?.date?.value ? this.transactionForm?.controls?.date?.value : '',
       category: this.transactionForm?.controls?.category?.value ? this.transactionForm?.controls?.category?.value : '',
     }
-    this.transactions.push(newTransaction);
+    this.dataService.addTransaction(newTransaction);
     this.resetForm();
-    this.dataService.setTransactionsToCookie(this.transactions);
   }
 
   delete(transaction: Transaction) {
-    this.transactions = this.transactions.filter(t =>
-      t.category !== transaction.category && t.date !== transaction.date && t.name !== transaction.name && t.price !== transaction.price);
-    this.dataService.setTransactionsToCookie(this.transactions);
+    this.dataService.deleteTransaction(transaction);
   }
 
   private setCategoryOptions() {
-    this.budgets.forEach(budget => {
-      this.categoryOptions.push(budget.category);
+    this.budgets$.pipe(take(1)).subscribe(budgets => {
+      budgets.forEach(budget => {
+        this.categoryOptions.push(budget.category);
+      })
     })
   }
 

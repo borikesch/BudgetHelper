@@ -7,7 +7,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let bankaccount of bankaccounts">
+            <tr *ngFor="let bankaccount of (bankaccounts$ | async)">
                 <td>{{ bankaccount.name }}</td>
                 <td>{{ bankaccount.amount | currency:'EUR' }}</td>
                 <td><button (click)="deleteBudget(bankaccount)">delete</button></td>

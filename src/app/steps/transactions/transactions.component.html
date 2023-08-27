@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let transaction of transactions">
+            <tr *ngFor="let transaction of (transactions$ | async)">
                 <td>{{ transaction.name }}</td>
                 <td>{{ transaction.category }}</td>
                 <td>{{ transaction.date }}</td>

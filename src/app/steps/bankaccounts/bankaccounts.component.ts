@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, take } from 'rxjs';
 import { Bankaccount } from 'src/app/models/bankaccount.model';
 import { DataService } from 'src/app/service/data/data.service';
 
@@ -9,7 +10,7 @@ import { DataService } from 'src/app/service/data/data.service';
   styleUrls: ['./bankaccounts.component.css']
 })
 export class BankaccountsComponent implements OnInit {
-  bankaccounts: Bankaccount[] = [];
+  bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
   showAdd = false;
 
   bankaccountForm = new FormGroup({
@@ -22,7 +23,6 @@ export class BankaccountsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.bankaccounts = this.dataService.getBankaccountsFromCookie();
     this.resetForm();
   }
 
@@ -31,19 +31,18 @@ export class BankaccountsComponent implements OnInit {
       name: this.bankaccountForm?.controls?.name?.value ? this.bankaccountForm?.controls?.name?.value : '',
       amount: this.bankaccountForm?.controls?.amount?.value ? this.bankaccountForm?.controls?.amount?.value : '',
     }
-    this.bankaccounts.push(newBankaccount);
-    this.dataService.setBankaccountsToCookie(this.bankaccounts);
+    this.dataService.addBankaccount(newBankaccount);
     this.resetForm();
   }
 
   deleteBudget(bankaccount: Bankaccount): void {
-    this.bankaccounts = this.bankaccounts.filter(b => b.name !== bankaccount.name);
-    this.dataService.setBankaccountsToCookie(this.bankaccounts);
+    this.dataService.deleteBankaccount(bankaccount);
   }
 
   getTotalAmount(): number {
     let result = 0;
-    this.bankaccounts.forEach(ba => result += parseFloat(ba.amount));
+    // TODO oplossen met een observable
+    // this.bankaccounts$.pipe(take(1)).forEach(ba => result += parseFloat(ba.amount));
     return result;
   }
 
