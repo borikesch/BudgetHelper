@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { Budget, ExtendedBudget } from 'src/app/models/budget.model';
 import { BudgetCalculatorService } from 'src/app/service/budget/calculator.service';
 import { DataService } from 'src/app/service/data/data.service'
@@ -12,7 +13,16 @@ import { DataService } from 'src/app/service/data/data.service'
 })
 export class BudgetsComponent implements OnInit {
   budgets$: Observable<Budget[]> = this.dataService.budgets$;
-  extendedBudgets: ExtendedBudget[] = [];
+  extendedBudgets$: Observable<ExtendedBudget[]> =
+    this.budgetCalculatorService.calculateExtendedBudget(this.budgets$, this.dataService.transactions$, new Date().toISOString().split('T')[0]);
+
+  totalBudgetPerMonth$: Observable<number> = this.budgets$.pipe(
+    takeUntilDestroyed(),
+    map(budgets => budgets.reduce((total, budget) => total + parseFloat(budget.moneyPerMonth), 0)));
+  getTotalBudgetLeft$: Observable<number> = this.extendedBudgets$.pipe(
+    takeUntilDestroyed(),
+    map(budgets => budgets.reduce((total, budget) => total + parseFloat(budget.moneyLeftInBudget), 0)));
+
   showAdd = false;
 
   budgetForm = new FormGroup({
@@ -27,7 +37,6 @@ export class BudgetsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.calculateExtendedBudgets();
     this.resetForm();
   }
 
@@ -40,28 +49,10 @@ export class BudgetsComponent implements OnInit {
     }
     this.dataService.addBudget(newBudget);
     this.resetForm();
-    this.calculateExtendedBudgets();
   }
 
   deleteBudget(budget: Budget): void {
     this.dataService.deleteBudget(budget);
-  }
-
-  getTotalBudgetPerMonth(): string {
-    let result = 0;
-    // TODO mbv observable
-    // this.budgets.forEach(budget => {
-    //   result += parseFloat(budget.moneyPerMonth);
-    // });
-    return '€ ' + result.toFixed(2).toString();
-  }
-
-  getTotalBudgetLeft(): string {
-    let result = 0;
-    this.extendedBudgets.forEach(budget => {
-      result += parseFloat(budget.moneyLeftInBudget);
-    });
-    return '€ ' + result.toFixed(2).toString();
   }
 
   private resetForm() {
@@ -72,10 +63,5 @@ export class BudgetsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.budgetForm?.controls?.date.setValue(currentDate);
-  }
-
-  private calculateExtendedBudgets() {
-    const dateOfCalculation = new Date().toISOString().split('T')[0];
-    this.extendedBudgets = this.budgetCalculatorService.calculateExtendedBudget(this.budgets$, this.dataService.transactions$, dateOfCalculation);
   }
 }

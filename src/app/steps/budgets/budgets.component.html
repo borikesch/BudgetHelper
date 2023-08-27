@@ -9,7 +9,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let budget of extendedBudgets">
+            <tr *ngFor="let budget of (extendedBudgets$ | async)">
                 <td>{{ budget.category }}</td>
                 <td>{{ budget.moneyLeftInBudget | currency:'EUR' }}</td>
                 <td>{{ budget.moneyPerMonth | currency:'EUR' }}</td>
@@ -17,8 +17,8 @@
             </tr>
             <tr>
                 <td> Total</td>
-                <td> {{ getTotalBudgetPerMonth() }}</td>
-                <td> {{ getTotalBudgetLeft() }}</td>
+                <td> {{ getTotalBudgetLeft$ | async | currency:'EUR' }}</td>
+                <td> {{ totalBudgetPerMonth$ | async | currency:'EUR' }}</td>
                 <td> </td>
             </tr>
         </tbody>

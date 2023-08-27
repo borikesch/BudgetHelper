@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <td> Total</td>
-                <td> {{ getTotalAmount() | currency:'EUR'}}</td>
+                <td> {{ bankaccountsTotalAmount$ | async | currency:'EUR'}}</td>
                 <td> </td>
             </tr>
         </tbody>

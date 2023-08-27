@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, take } from 'rxjs';
+import { Observable, map, take } from 'rxjs';
 import { Bankaccount } from 'src/app/models/bankaccount.model';
 import { DataService } from 'src/app/service/data/data.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-bankaccounts',
@@ -11,6 +12,10 @@ import { DataService } from 'src/app/service/data/data.service';
 })
 export class BankaccountsComponent implements OnInit {
   bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
+  bankaccountsTotalAmount$: Observable<number> = this.bankaccounts$.pipe(
+    takeUntilDestroyed(),
+    map(bankaccounts => bankaccounts.reduce((total, account) => total + parseFloat(account.amount), 0)));
+
   showAdd = false;
 
   bankaccountForm = new FormGroup({
@@ -37,13 +42,6 @@ export class BankaccountsComponent implements OnInit {
 
   deleteBudget(bankaccount: Bankaccount): void {
     this.dataService.deleteBankaccount(bankaccount);
-  }
-
-  getTotalAmount(): number {
-    let result = 0;
-    // TODO oplossen met een observable
-    // this.bankaccounts$.pipe(take(1)).forEach(ba => result += parseFloat(ba.amount));
-    return result;
   }
 
   private resetForm() {
