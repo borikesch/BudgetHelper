@@ -35,6 +35,12 @@ export class DataService {
     this.transactions$.pipe(take(1)).subscribe(transactions => {
       transactions.push(transaction);
       this.setTransactions(transactions);
+      if (transaction.originBankaccountName) {
+        this.modifyBankaccount(transaction.price, transaction.originBankaccountName);
+      }
+      if (transaction.targetBankaccountName) {
+        this.modifyBankaccount('-' + transaction.price, transaction.targetBankaccountName);
+      }
     });
   }
 
@@ -109,5 +115,15 @@ export class DataService {
 
   private transformInputToCookie(transactions: any[]): string {
     return JSON.stringify(transactions);
+  }
+
+  private modifyBankaccount(amount: string, name: string) {
+    this.bankaccounts$.pipe(take(1)).subscribe(bankaccounts => {
+      const targetBankaccount = bankaccounts.find(ba => ba.name === name);
+      if (targetBankaccount) {
+        targetBankaccount.amount = (parseFloat(targetBankaccount.amount) - parseFloat(amount)).toString();
+      }
+      this.setBankaccounts(bankaccounts);
+    })
   }
 }

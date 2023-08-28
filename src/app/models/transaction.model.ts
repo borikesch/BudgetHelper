@@ -3,4 +3,6 @@ export interface Transaction {
     name: string;
     date: string;
     category: string;
+    originBankaccountName?: string;
+    targetBankaccountName?: string;
 }

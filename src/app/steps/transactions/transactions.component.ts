@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, take } from 'rxjs';
+import { Bankaccount } from 'src/app/models/bankaccount.model';
 import { Budget } from 'src/app/models/budget.model';
 import { Transaction } from 'src/app/models/transaction.model';
 import { DataService } from 'src/app/service/data/data.service';
@@ -13,20 +14,26 @@ import { DataService } from 'src/app/service/data/data.service';
 export class TransactionsComponent implements OnInit {
   transactions$: Observable<Transaction[]> = this.dataService.transactions$;
   budgets$: Observable<Budget[]> = this.dataService.budgets$;
+  bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
+
   showAdd = false;
   categoryOptions: string[] = [];
+  bankaccountOptions: string[] = [];
 
   transactionForm = new FormGroup({
     price: new FormControl<string>('', Validators.required),
     name: new FormControl<string>('', Validators.required),
     date: new FormControl<any>('', Validators.required),
     category: new FormControl<string>('', Validators.required),
+    bankaccount: new FormControl<string>(''),
+    targetbankaccount: new FormControl<string>(''),
   });
 
   constructor(private dataService: DataService) { }
 
   ngOnInit(): void {
     this.setCategoryOptions();
+    this.setBankaccountOptions();
     this.resetForm();
   }
 
@@ -36,6 +43,8 @@ export class TransactionsComponent implements OnInit {
       name: this.transactionForm?.controls?.name?.value ? this.transactionForm?.controls?.name?.value : '',
       date: this.transactionForm?.controls?.date?.value ? this.transactionForm?.controls?.date?.value : '',
       category: this.transactionForm?.controls?.category?.value ? this.transactionForm?.controls?.category?.value : '',
+      originBankaccountName: this.transactionForm?.controls?.bankaccount?.value ? this.transactionForm?.controls?.bankaccount?.value : '',
+      targetBankaccountName: this.transactionForm?.controls?.targetbankaccount?.value ? this.transactionForm?.controls?.targetbankaccount?.value : '',
     }
     this.dataService.addTransaction(newTransaction);
     this.resetForm();
@@ -43,6 +52,14 @@ export class TransactionsComponent implements OnInit {
 
   delete(transaction: Transaction) {
     this.dataService.deleteTransaction(transaction);
+  }
+
+  private setBankaccountOptions() {
+    this.bankaccounts$.subscribe(bankaccounts => {
+      bankaccounts.forEach(bankaccount => {
+        this.bankaccountOptions.push(bankaccount.name);
+      })
+    })
   }
 
   private setCategoryOptions() {

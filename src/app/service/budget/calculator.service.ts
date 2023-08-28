@@ -23,11 +23,25 @@ export class BudgetCalculatorService {
           });
         })
         transactions.forEach(transaction => {
+          let budgetDiff = 0;
           const targetBudget = result.find(budget => budget.category === transaction.category)
           if (!targetBudget) {
             return;
           }
-          targetBudget.moneyLeftInBudget = (parseFloat(targetBudget.moneyLeftInBudget) - parseFloat(transaction.price)).toString();
+          if (transaction.originBankaccountName && transaction.targetBankaccountName) {
+            // Geld intern overgemaakt
+            budgetDiff = 0
+          } else if (!transaction.originBankaccountName && !transaction.targetBankaccountName) {
+            // Invalide transactie, negeren
+            budgetDiff = 0;
+          } else if (!transaction.originBankaccountName) {
+            // Geld gekregen
+            budgetDiff = -1 * parseFloat(transaction.price)
+          } else {
+            // Geld uitgegeven
+            budgetDiff = parseFloat(transaction.price)
+          }
+          targetBudget.moneyLeftInBudget = (parseFloat(targetBudget.moneyLeftInBudget) - budgetDiff).toString();
         })
         return result;
       }),

@@ -53,24 +53,28 @@ export class AdminComponent {
       category: 'Boodschappen',
       name: 'Wekelijkse boodschappen',
       date: today,
+      originBankaccountName: 'Hoofdaccount',
     });
     this.dataService.addTransaction({
       price: '24.39',
       category: 'Boodschappen',
       name: 'AH boodschappen',
       date: today,
+      originBankaccountName: 'Hoofdaccount',
     });
     this.dataService.addTransaction({
       price: '650',
       category: 'Hypotheek',
       name: 'Maandelijkse afschrijving',
       date: today,
+      originBankaccountName: 'Hoofdaccount',
     });
     this.dataService.addTransaction({
       price: '35.34',
       category: 'Uitjes',
       name: 'Uit eten geweest',
       date: today,
+      originBankaccountName: 'Hoofdaccount',
     });
   }
 }

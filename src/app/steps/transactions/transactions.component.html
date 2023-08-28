@@ -33,6 +33,8 @@
                         <th>Prijs</th>
                         <th>Datum</th>
                         <th>Category</th>
+                        <th>Bankaccount waar het geld van af gaat</th>
+                        <th>Bankaccount waar het geld naar toe gaat</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +46,22 @@
                             <select id="category" name="category" formControlName="category">
                                 <option value="">Kies een Category</option>
                                 <ng-container *ngFor="let option of categoryOptions">
+                                    <option [value]="option">{{ option }}</option>
+                                </ng-container>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="bankaccount" name="bankaccount" formControlName="bankaccount">
+                                <option value="">Kies een Bankaccount</option>
+                                <ng-container *ngFor="let option of bankaccountOptions">
+                                    <option [value]="option">{{ option }}</option>
+                                </ng-container>
+                            </select>
+                        </td>
+                        <td>
+                            <select id="targetbankaccount" name="targetbankaccount" formControlName="targetbankaccount">
+                                <option value="">Kies een target Bankaccount (optioneel)</option>
+                                <ng-container *ngFor="let option of bankaccountOptions">
                                     <option [value]="option">{{ option }}</option>
                                 </ng-container>
                             </select>
