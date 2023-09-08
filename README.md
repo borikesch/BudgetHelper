@@ -31,11 +31,12 @@ X_Overview of all transactions made
 _Ability to change transactions
 X_Ability to setup budgets
 _Overview of budget this month
-_Change 'start of month' 
+X_Change 'start of month' (not relevant anymore)
 X_Ability to save transactions and budgets in cookies
 _Warning when your total budget is currently lower then your total bankaccount amount
 _Warning when you are adding an invalid transaction (no category, no bankaccount, etc)
 _Last transaction date remembered
+_Show the last time you did some transactions or something else
 
 ## Challenges
 _No way yet to validate inputs
@@ -43,25 +44,29 @@ _No way yet to validate inputs
         _Different accounts?
 _No way to check if you budgets is valid
     _Warning if your income was lower then your planned budget
-_No way to put in your income yet
-    _Possible solution: Put in your income without a category
-_What to do with money in your accounts that is not in your budgets?
-_What to do if the money in your budgets exceed the money in your accounts
-_How and when do you start the budgetting
-_What is the most efficient workflow
+X_No way to put in your income yet
+    X_Possible solution: Put in your income without a category
+X_What to do with money in your accounts that is not in your budgets?
+X_What to do if the money in your budgets exceed the money in your accounts (You will just be in the red on your account)
+X_How and when do you start the budgetting (At the moment that you start using the website)
+X_What is the most efficient workflow (Bankaccounts => budgets => Transactions)
 _What should be on the dashboard?
     _Graph of moneyflows?
     _Warnings currently active
+    _Explanation of the initialization (partly done)
 
 ## Outline of logic
 
 Dashboard
-    - Overview Transactions
-        - Add Transaction
+    X- Overview Transactions
+        X- Add Transaction
         - Change Transaction
-    - Overview budgets
-        - Add Budget
+    X- Overview budgets
+        X- Add Budget
         - Change Budget
+    X- Overview Bankaccounts
+        X- Add Bankaccounts
+        - Change Bankaccounts
 
 ## Flow
 Set up your bank accounts with their current amounts
