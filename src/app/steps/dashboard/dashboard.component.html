@@ -1,1 +1,19 @@
-<p>dashboard works!</p>
+<ng-container *ngIf="!(hasBankaccountsSetup$ | async); else hasBankaccountsSetup">
+    <p>
+        We zien dat je nog geen bankrekeningen hebt ingesteld. Laten we dit eerst doen.
+    </p>
+    <a routerLink="/bankaccounts" routerLinkActive="active" ariaCurrentWhenActive="page">Klik hier</a>
+</ng-container>
+<ng-template #hasBankaccountsSetup>
+    <ng-container *ngIf="!(budgetsSetup$ | async); else budgetsSetup">
+        <p>
+            Je bankrekeningen staan nu goed, nu moeten we wat budgetten gaan instellen.
+        </p>
+        <a routerLink="/budgets" routerLinkActive="active" ariaCurrentWhenActive="page">Klik hier</a>
+    </ng-container>
+</ng-template>
+
+<ng-template #budgetsSetup>
+    Alles staat goed, vanaf vandaag kan je je inkomen en uitgaven bijhouden op deze link
+    <a routerLink="/transactions" routerLinkActive="active" ariaCurrentWhenActive="page">Klik hier</a>
+</ng-template>

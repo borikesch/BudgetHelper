@@ -35,6 +35,7 @@ _Change 'start of month'
 X_Ability to save transactions and budgets in cookies
 _Warning when your total budget is currently lower then your total bankaccount amount
 _Warning when you are adding an invalid transaction (no category, no bankaccount, etc)
+_Last transaction date remembered
 
 ## Challenges
 _No way yet to validate inputs
@@ -61,4 +62,15 @@ Dashboard
     - Overview budgets
         - Add Budget
         - Change Budget
+
+## Flow
+Set up your bank accounts with their current amounts
+Set up your budgets and pick how much is in it from your bankaccounts
+Then you have a base point from which you start
+
+Then you just put in your transactions
+When your transaction is an income action, put it proportional in your budgets (based on budget per month)
+    Warning if income isn't enough
+        Optional (might have 2 incomes)
+    Option to put it all in one budget (vakantie geld for example)
         
