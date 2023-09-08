@@ -9,15 +9,22 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let budget of (extendedBudgets$ | async)">
+            <tr *ngFor="let budget of (budgets$ | async)">
                 <td>{{ budget.category }}</td>
                 <td>{{ budget.moneyLeftInBudget | currency:'EUR' }}</td>
                 <td>{{ budget.moneyPerMonth | currency:'EUR' }}</td>
                 <td><button (click)="deleteBudget(budget)">delete</button></td>
             </tr>
+            <ng-container *ngIf="(totalMoneyUnaccounted$ | async) !== 0">
+                <td>Geld wat niet in een budget zit</td>
+                <td>{{ totalMoneyUnaccounted$ | async | currency:'EUR' }}</td>
+                <td>{{ 0 | currency:'EUR' }}</td>
+                <td></td>
+            </ng-container>
             <tr>
                 <td> Total</td>
-                <td> {{ getTotalBudgetLeft$ | async | currency:'EUR' }}</td>
+                <td> {{ (bankaccountsTotalAmount$ | async) | currency:'EUR' }}
+                </td>
                 <td> {{ totalBudgetPerMonth$ | async | currency:'EUR' }}</td>
                 <td> </td>
             </tr>
@@ -38,6 +45,7 @@
                     <tr>
                         <th>Categorie</th>
                         <th>Budget per maand</th>
+                        <th>Geld wat je momenteel in je budget hebt zitten</th>
                         <th>Datum</th>
                     </tr>
                 </thead>
@@ -45,6 +53,7 @@
                     <tr>
                         <td><input id="category" type="text" formControlName="category"></td>
                         <td><input id="moneyForBudget" type="text" formControlName="moneyForBudget"></td>
+                        <td><input id="moneyLeftInBudget" type="text" formControlName="moneyLeftInBudget"></td>
                         <td><input id="date" type="date" formControlName="date"></td>
                     </tr>
                 </tbody>

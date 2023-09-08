@@ -1,14 +1,6 @@
 export interface Budget {
+    moneyLeftInBudget: string;
     moneyPerMonth: string;
     category: string;
     dateAdded: string;
-    changes: Change[];
-}
-
-export interface ExtendedBudget extends Budget {
-    moneyLeftInBudget: string;
-}
-
-export interface Change {
-
 }

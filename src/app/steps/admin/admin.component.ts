@@ -27,22 +27,22 @@ export class AdminComponent {
   private createTestBudgets() {
     const today = new Date().toISOString().split('T')[0];
     this.dataService.addBudget({
+      moneyLeftInBudget: '100',
       moneyPerMonth: '150',
       category: 'Boodschappen',
       dateAdded: today,
-      changes: [],
     });
     this.dataService.addBudget({
+      moneyLeftInBudget: '100',
       moneyPerMonth: '650',
       category: 'Hypotheek',
       dateAdded: today,
-      changes: [],
     });
     this.dataService.addBudget({
+      moneyLeftInBudget: '100',
       moneyPerMonth: '100',
       category: 'Uitjes',
       dateAdded: today,
-      changes: [],
     });
   }
 

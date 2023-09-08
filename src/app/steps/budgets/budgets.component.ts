@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable, map, of } from 'rxjs';
-import { Budget, ExtendedBudget } from 'src/app/models/budget.model';
-import { BudgetCalculatorService } from 'src/app/service/budget/calculator.service';
+import { Observable, combineLatest, map, of, take } from 'rxjs';
+import { Bankaccount } from 'src/app/models/bankaccount.model';
+import { Budget } from 'src/app/models/budget.model';
 import { DataService } from 'src/app/service/data/data.service'
 
 @Component({
@@ -12,20 +12,31 @@ import { DataService } from 'src/app/service/data/data.service'
   styleUrls: ['./budgets.component.css']
 })
 export class BudgetsComponent implements OnInit {
+  initialized = false;
+  showAdd = false;
   budgets$: Observable<Budget[]> = this.dataService.budgets$;
-  extendedBudgets$: Observable<ExtendedBudget[]> =
-    this.budgetCalculatorService.calculateExtendedBudget(this.budgets$, this.dataService.transactions$, new Date().toISOString().split('T')[0]);
+  bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
+  bankaccountsTotalAmount$: Observable<number> = this.bankaccounts$.pipe(
+    takeUntilDestroyed(),
+    map(bankaccounts => bankaccounts.reduce((total, account) => total + parseFloat(account.amount), 0)));
 
   totalBudgetPerMonth$: Observable<number> = this.budgets$.pipe(
     takeUntilDestroyed(),
     map(budgets => budgets.reduce((total, budget) => total + parseFloat(budget.moneyPerMonth), 0)));
-  getTotalBudgetLeft$: Observable<number> = this.extendedBudgets$.pipe(
+  getTotalBudgetLeft$: Observable<number> = this.budgets$.pipe(
     takeUntilDestroyed(),
     map(budgets => budgets.reduce((total, budget) => total + parseFloat(budget.moneyLeftInBudget), 0)));
 
-  showAdd = false;
+  totalMoneyUnaccounted$ = combineLatest([
+    this.getTotalBudgetLeft$,
+    this.bankaccountsTotalAmount$,
+  ]).pipe(
+    takeUntilDestroyed(),
+    map(([budgetTotal, bankaccountTotal]) => bankaccountTotal - budgetTotal),
+  );
 
   budgetForm = new FormGroup({
+    moneyLeftInBudget: new FormControl<string>('0', Validators.required),
     moneyForBudget: new FormControl<string>('', Validators.required),
     category: new FormControl<string>('', Validators.required),
     date: new FormControl<any>('', Validators.required),
@@ -33,7 +44,6 @@ export class BudgetsComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    private budgetCalculatorService: BudgetCalculatorService,
   ) { }
 
   ngOnInit(): void {
@@ -42,10 +52,10 @@ export class BudgetsComponent implements OnInit {
 
   onAdd(): void {
     const newBudget: Budget = {
+      moneyLeftInBudget: this.budgetForm?.controls?.moneyLeftInBudget?.value ? this.budgetForm?.controls?.moneyLeftInBudget?.value : '',
       moneyPerMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       category: this.budgetForm?.controls?.category?.value ? this.budgetForm?.controls?.category?.value : '',
       dateAdded: this.budgetForm?.controls?.date?.value ? this.budgetForm?.controls?.date?.value : '',
-      changes: [],
     }
     this.dataService.addBudget(newBudget);
     this.resetForm();
