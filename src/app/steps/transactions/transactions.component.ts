@@ -17,6 +17,7 @@ export class TransactionsComponent implements OnInit {
   bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
 
   showAdd = false;
+  transactionId: number = 0;
   categoryOptions: string[] = [];
   bankaccountOptions: string[] = [];
 
@@ -35,6 +36,7 @@ export class TransactionsComponent implements OnInit {
     this.setCategoryOptions();
     this.setBankaccountOptions();
     this.resetForm();
+    this.getTransactionId();
   }
 
   onAdd(): void {
@@ -45,7 +47,9 @@ export class TransactionsComponent implements OnInit {
       category: this.transactionForm?.controls?.category?.value ? this.transactionForm?.controls?.category?.value : '',
       originBankaccountName: this.transactionForm?.controls?.bankaccount?.value ? this.transactionForm?.controls?.bankaccount?.value : '',
       targetBankaccountName: this.transactionForm?.controls?.targetbankaccount?.value ? this.transactionForm?.controls?.targetbankaccount?.value : '',
+      transactionId: this.transactionId,
     }
+    this.transactionId++;
     this.dataService.addTransaction(newTransaction);
     this.resetForm();
   }
@@ -55,7 +59,7 @@ export class TransactionsComponent implements OnInit {
   }
 
   private setBankaccountOptions() {
-    this.bankaccounts$.subscribe(bankaccounts => {
+    this.bankaccounts$.pipe(take(1)).subscribe(bankaccounts => {
       bankaccounts.forEach(bankaccount => {
         this.bankaccountOptions.push(bankaccount.name);
       })
@@ -78,5 +82,12 @@ export class TransactionsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.transactionForm?.controls?.date.setValue(currentDate);
+  }
+
+  private getTransactionId() {
+    this.transactions$.pipe(take(1)).subscribe(transactions => {
+      this.transactionId = transactions.length > 0 ?
+        transactions[transactions.length - 1].transactionId : 0;
+    })
   }
 }

@@ -54,6 +54,7 @@ export class AdminComponent {
       name: 'Wekelijkse boodschappen',
       date: today,
       originBankaccountName: 'Hoofdaccount',
+      transactionId: 1,
     });
     this.dataService.addTransaction({
       price: '24.39',
@@ -61,6 +62,7 @@ export class AdminComponent {
       name: 'AH boodschappen',
       date: today,
       originBankaccountName: 'Hoofdaccount',
+      transactionId: 2,
     });
     this.dataService.addTransaction({
       price: '650',
@@ -68,6 +70,7 @@ export class AdminComponent {
       name: 'Maandelijkse afschrijving',
       date: today,
       originBankaccountName: 'Hoofdaccount',
+      transactionId: 3,
     });
     this.dataService.addTransaction({
       price: '35.34',
@@ -75,6 +78,7 @@ export class AdminComponent {
       name: 'Uit eten geweest',
       date: today,
       originBankaccountName: 'Hoofdaccount',
+      transactionId: 4,
     });
   }
 }

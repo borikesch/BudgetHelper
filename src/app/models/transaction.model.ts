@@ -5,4 +5,5 @@ export interface Transaction {
     category: string;
     originBankaccountName?: string;
     targetBankaccountName?: string;
+    transactionId: number;
 }

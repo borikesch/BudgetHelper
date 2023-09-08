@@ -59,6 +59,22 @@ export class DataService {
     this.transactions$.pipe(take(1)).subscribe(transactions => {
       const newTransactions = transactions.filter(t => t.category !== transaction.category || t.date !== transaction.date || t.name !== transaction.name || t.price !== transaction.price);
       this.setTransactions(newTransactions);
+      if (transaction.originBankaccountName) {
+        this.modifyBankaccount('-' + transaction.price, transaction.originBankaccountName);
+        this.modifyBudget('-' + transaction.price, transaction.category);
+      }
+      /**
+       * Transactie naar eigen bankrekening
+       * Kan ontstaan door inkomsten of door geld wat je tussen banken overmaakt
+       * Als het intern is, niks doen voor budgetten
+       * Als het niet intern is, geld evenredig verdelen over budgetten
+       */
+      if (transaction.targetBankaccountName) {
+        this.modifyBankaccount(transaction.price, transaction.targetBankaccountName);
+        if (!transaction.originBankaccountName) {
+          this.shareIncomeOverBudgets('-' + transaction.price);
+        }
+      }
     });
   }
 
