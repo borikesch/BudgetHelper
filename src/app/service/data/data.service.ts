@@ -141,7 +141,7 @@ export class DataService {
   private shareIncomeOverBudgets(amount: string) {
     this.budgets$.pipe(take(1)).subscribe(budgets => {
       let totalBudget = 0;
-      budgets.forEach(b => totalBudget += parseFloat(b.moneyLeftInBudget));
+      budgets.forEach(b => totalBudget += parseFloat(b.moneyPerMonth));
       budgets.forEach(b => {
         b.moneyLeftInBudget = (parseFloat(b.moneyLeftInBudget) + (parseFloat(amount) * (parseFloat(b.moneyPerMonth) / totalBudget))).toString();
       });
