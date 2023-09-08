@@ -24,7 +24,7 @@ export class TransactionsComponent implements OnInit {
     price: new FormControl<string>('', Validators.required),
     name: new FormControl<string>('', Validators.required),
     date: new FormControl<any>('', Validators.required),
-    category: new FormControl<string>('', Validators.required),
+    category: new FormControl<string>(''),
     bankaccount: new FormControl<string>(''),
     targetbankaccount: new FormControl<string>(''),
   });

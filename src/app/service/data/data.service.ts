@@ -35,11 +35,22 @@ export class DataService {
     this.transactions$.pipe(take(1)).subscribe(transactions => {
       transactions.push(transaction);
       this.setTransactions(transactions);
+      // Transactie naar een andere bank toe
       if (transaction.originBankaccountName) {
         this.modifyBankaccount(transaction.price, transaction.originBankaccountName);
+        this.modifyBudget(transaction.price, transaction.category);
       }
+      /**
+       * Transactie naar eigen bankrekening
+       * Kan ontstaan door inkomsten of door geld wat je tussen banken overmaakt
+       * Als het intern is, niks doen voor budgetten
+       * Als het niet intern is, geld evenredig verdelen over budgetten
+       */
       if (transaction.targetBankaccountName) {
         this.modifyBankaccount('-' + transaction.price, transaction.targetBankaccountName);
+        if (!transaction.originBankaccountName) {
+          this.shareIncomeOverBudgets(transaction.price);
+        }
       }
     });
   }
@@ -48,7 +59,7 @@ export class DataService {
     this.transactions$.pipe(take(1)).subscribe(transactions => {
       const newTransactions = transactions.filter(t => t.category !== transaction.category || t.date !== transaction.date || t.name !== transaction.name || t.price !== transaction.price);
       this.setTransactions(newTransactions);
-    })
+    });
   }
 
   addBudget(budget: Budget): void {
@@ -62,7 +73,7 @@ export class DataService {
     this.budgets$.pipe(take(1)).subscribe(budgets => {
       const newBudgets = budgets.filter(b => b.category !== budget.category);
       this.setBudgets(newBudgets);
-    })
+    });
   }
 
   addBankaccount(bankaccount: Bankaccount): void {
@@ -76,7 +87,7 @@ export class DataService {
     this.bankaccounts$.pipe(take(1)).subscribe(bankaccounts => {
       const newBankaccounts = bankaccounts.filter(b => b.name !== bankaccount.name);
       this.setBankaccounts(newBankaccounts);
-    })
+    });
   }
 
   private getBudgetsFromCookie(): void {
@@ -124,6 +135,27 @@ export class DataService {
         targetBankaccount.amount = (parseFloat(targetBankaccount.amount) - parseFloat(amount)).toString();
       }
       this.setBankaccounts(bankaccounts);
+    })
+  }
+
+  private shareIncomeOverBudgets(amount: string) {
+    this.budgets$.pipe(take(1)).subscribe(budgets => {
+      let totalBudget = 0;
+      budgets.forEach(b => totalBudget += parseFloat(b.moneyLeftInBudget));
+      budgets.forEach(b => {
+        b.moneyLeftInBudget = (parseFloat(b.moneyLeftInBudget) + (parseFloat(amount) * (parseFloat(b.moneyPerMonth) / totalBudget))).toString();
+      });
+      this.setBudgets(budgets);
+    })
+  }
+
+  private modifyBudget(amount: string, category: string) {
+    this.budgets$.pipe(take(1)).subscribe(budgets => {
+      const targetBudget = budgets.find(ba => ba.category === category);
+      if (targetBudget) {
+        targetBudget.moneyLeftInBudget = (parseFloat(targetBudget.moneyLeftInBudget) - parseFloat(amount)).toString();
+      }
+      this.setBudgets(budgets);
     })
   }
 }
