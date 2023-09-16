@@ -70,8 +70,9 @@ export class TransactionsComponent implements OnInit {
     this.budgets$.pipe(take(1)).subscribe(budgets => {
       budgets.forEach(budget => {
         this.categoryOptions.push(budget.category);
-      })
-    })
+      });
+      this.categoryOptions.sort();
+    });
   }
 
   private resetForm() {

@@ -5,3 +5,7 @@ td {
     width: 25%;
     text-align: center;
 }
+
+a {
+    cursor: pointer;
+}

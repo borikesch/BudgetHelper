@@ -31,18 +31,21 @@ export class AdminComponent {
       moneyPerMonth: '150',
       category: 'Boodschappen',
       dateAdded: today,
+      budgetId: '2',
     });
     this.dataService.addBudget({
       moneyLeftInBudget: '100',
       moneyPerMonth: '650',
       category: 'Hypotheek',
       dateAdded: today,
+      budgetId: '2',
     });
     this.dataService.addBudget({
       moneyLeftInBudget: '100',
       moneyPerMonth: '100',
       category: 'Uitjes',
       dateAdded: today,
+      budgetId: '2',
     });
   }
 

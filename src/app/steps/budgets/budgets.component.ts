@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, combineLatest, map, of, take } from 'rxjs';
@@ -14,7 +14,7 @@ import { DataService } from 'src/app/service/data/data.service'
 export class BudgetsComponent implements OnInit {
   initialized = false;
   showAdd = false;
-  budgets$: Observable<Budget[]> = this.dataService.budgets$;
+  budgets$: Observable<Budget[]> = this.dataService.budgets$.pipe(map(budgets => budgets.sort((a, b) => this.budgetSorter(a, b))));
   bankaccounts$: Observable<Bankaccount[]> = this.dataService.bankaccounts$;
   bankaccountsTotalAmount$: Observable<number> = this.bankaccounts$.pipe(
     takeUntilDestroyed(),
@@ -35,6 +35,11 @@ export class BudgetsComponent implements OnInit {
     map(([budgetTotal, bankaccountTotal]) => bankaccountTotal - budgetTotal),
   );
 
+  sortAlphabetically = true;
+  sortDescending = false;
+  sortMoneyEachMonth = false;
+  sortMoneyLeft = false;
+
   budgetForm = new FormGroup({
     moneyLeftInBudget: new FormControl<string>('0', Validators.required),
     moneyForBudget: new FormControl<string>('', Validators.required),
@@ -44,6 +49,7 @@ export class BudgetsComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
+    private cdr: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
@@ -56,6 +62,7 @@ export class BudgetsComponent implements OnInit {
       moneyPerMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       category: this.budgetForm?.controls?.category?.value ? this.budgetForm?.controls?.category?.value : '',
       dateAdded: this.budgetForm?.controls?.date?.value ? this.budgetForm?.controls?.date?.value : '',
+      budgetId: '',
     }
     this.dataService.addBudget(newBudget);
     this.resetForm();
@@ -63,6 +70,26 @@ export class BudgetsComponent implements OnInit {
 
   deleteBudget(budget: Budget): void {
     this.dataService.deleteBudget(budget);
+  }
+
+  setSorting(sorter: string): void {
+    if (sorter === 'alphabetically') {
+      this.sortDescending = this.sortAlphabetically ? !this.sortDescending : false;
+      this.sortAlphabetically = true;
+      this.sortMoneyLeft = false;
+      this.sortMoneyEachMonth = false;
+    } else if (sorter === 'moneyLeft') {
+      this.sortDescending = this.sortMoneyLeft ? !this.sortDescending : false;
+      this.sortAlphabetically = false;
+      this.sortMoneyLeft = true;
+      this.sortMoneyEachMonth = false;
+    } else if (sorter === 'moneyEachMonth') {
+      this.sortDescending = this.sortMoneyEachMonth ? !this.sortDescending : false;
+      this.sortAlphabetically = false;
+      this.sortMoneyLeft = false;
+      this.sortMoneyEachMonth = true;
+    }
+    this.budgets$ = this.dataService.budgets$.pipe(map(budgets => budgets.sort((a, b) => this.budgetSorter(a, b))));
   }
 
   private resetForm() {
@@ -73,5 +100,21 @@ export class BudgetsComponent implements OnInit {
   private prefillDate() {
     let currentDate = new Date().toJSON().slice(0, 10);
     this.budgetForm?.controls?.date.setValue(currentDate);
+  }
+
+  private budgetSorter(a: Budget, b: Budget) {
+    let leftIsSmaller = false;
+    if (this.sortAlphabetically) {
+      leftIsSmaller = a.category < b.category;
+    }
+    if (this.sortMoneyLeft) {
+      leftIsSmaller = parseFloat(a.moneyLeftInBudget) < parseFloat(b.moneyLeftInBudget);
+    }
+    if (this.sortMoneyEachMonth) {
+      leftIsSmaller = parseFloat(a.moneyPerMonth) < parseFloat(b.moneyPerMonth);
+    }
+    return leftIsSmaller ?
+      this.sortDescending ? 1 : -1 :
+      this.sortDescending ? -1 : 1;
   }
 }

@@ -3,4 +3,5 @@ export interface Budget {
     moneyPerMonth: string;
     category: string;
     dateAdded: string;
+    budgetId: string;
 }
