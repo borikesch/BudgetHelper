@@ -15,7 +15,7 @@
                 <td>{{ budget.moneyPerMonth | currency:'EUR' }}</td>
                 <td><button (click)="deleteBudget(budget)">delete</button></td>
             </tr>
-            <ng-container *ngIf="(totalMoneyUnaccounted$ | async) !== 0">
+            <ng-container *ngIf="(totalMoneyUnaccounted$ | async) !== 0 ">
                 <td>Geld wat niet in een budget zit</td>
                 <td>{{ totalMoneyUnaccounted$ | async | currency:'EUR' }}</td>
                 <td>{{ 0 | currency:'EUR' }}</td>

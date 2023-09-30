@@ -62,7 +62,6 @@ export class BudgetsComponent implements OnInit {
       moneyPerMonth: this.budgetForm?.controls?.moneyForBudget?.value ? this.budgetForm?.controls?.moneyForBudget?.value : '',
       category: this.budgetForm?.controls?.category?.value ? this.budgetForm?.controls?.category?.value : '',
       dateAdded: this.budgetForm?.controls?.date?.value ? this.budgetForm?.controls?.date?.value : '',
-      budgetId: '',
     }
     this.dataService.addBudget(newBudget);
     this.resetForm();

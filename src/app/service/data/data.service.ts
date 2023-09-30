@@ -80,8 +80,9 @@ export class DataService {
 
   addBudget(budget: Budget): void {
     this.budgets$.pipe(take(1)).subscribe(budgets => {
-      budgets.push(budget);
-      this.setBudgets(budgets);
+      const newBudgets = budgets;
+      newBudgets.push(budget)
+      this.setBudgets(newBudgets);
     });
   }
 
@@ -107,33 +108,34 @@ export class DataService {
   }
 
   private getBudgetsFromCookie(): void {
-    this.budgets$.next(this.transformCookieToInput(this.cookieService.get(budgetsCookieName)));
+    this.budgets$.next(this.transformCookieToInput(window.localStorage.getItem(budgetsCookieName)));
   }
 
   private setBudgets(budgets: Budget[]): void {
-    this.cookieService.set(budgetsCookieName, this.transformInputToCookie(budgets));
+    const data = this.transformInputToCookie(budgets);
+    window.localStorage.setItem(budgetsCookieName, data);
     this.budgets$.next(budgets);
   }
 
   private getBankaccountsFromCookie(): void {
-    this.bankaccounts$.next(this.transformCookieToInput(this.cookieService.get(bankaccountsCookieName)));
+    this.bankaccounts$.next(this.transformCookieToInput(window.localStorage.getItem(bankaccountsCookieName)));
   }
 
   private setBankaccounts(bankaccounts: Bankaccount[]): void {
-    this.cookieService.set(bankaccountsCookieName, this.transformInputToCookie(bankaccounts));
+    window.localStorage.setItem(bankaccountsCookieName, this.transformInputToCookie(bankaccounts));
     this.bankaccounts$.next(bankaccounts);
   }
 
   private getTransactionsFromCookie(): void {
-    this.transactions$.next(this.transformCookieToInput(this.cookieService.get(transactionsCookieName)));
+    this.transactions$.next(this.transformCookieToInput(window.localStorage.getItem(transactionsCookieName)));
   }
 
   private setTransactions(transactions: Transaction[]): void {
-    this.cookieService.set(transactionsCookieName, this.transformInputToCookie(transactions));
+    window.localStorage.setItem(transactionsCookieName, this.transformInputToCookie(transactions));
     this.transactions$.next(transactions);
   }
 
-  private transformCookieToInput(cookieData: string): any[] {
+  private transformCookieToInput(cookieData: string | null): any[] {
     if (cookieData === '' || !cookieData) {
       return [];
     }
